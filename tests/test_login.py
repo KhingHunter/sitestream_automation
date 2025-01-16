@@ -3,13 +3,14 @@ from pages.login_page import LoginPage
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
 def test_valid_login():
     driver = get_driver()
     driver.get("https://app.sitestreamtech.com/")  # Replace with your login URL
 
     login_page = LoginPage(driver)
-    login_page.enter_username("your_username")  # Replace with your actual username
-    login_page.enter_password("your_password")  # Replace with your actual password
+    login_page.enter_username("hunter@redskytech.io")  # Replace with your actual username
+    login_page.enter_password("fat")  # Replace with your actual password
     login_page.click_login()
 
     # Wait for URL to contain "dashboard" or another expected element/condition
