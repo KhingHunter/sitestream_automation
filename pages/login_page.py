@@ -6,7 +6,7 @@ class LoginPage:
     def __init__(self, driver):
         self.driver = driver
         self.username_field = (By.ID, "email")
-        self.password_field = (By.CSS_SELECTOR, "inputtype='password']")  
+        self.password_field = (By.CSS_SELECTOR, "input[type='password']")  
         self.login_button = (By.CSS_SELECTOR, "button[type='submit']")  
 
     def enter_username(self, username):
