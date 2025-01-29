@@ -1,0 +1,72 @@
+import pytest
+import random
+from utils.driver_setup import get_driver
+from pages.login_page import LoginPage
+from pages.clients_page import ClientsPage  # Assuming you have a ClientsPage class
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
+def test_create_client():
+    driver = get_driver()
+    driver.get("https://app.sitestreamtech.com/")  # Correct login URL
+
+    login_page = LoginPage(driver)
+    login_page.enter_username("hunter@redskytech.io")  # Replace with your actual username
+    login_page.enter_password("fat")  # Replace with your actual password
+    login_page.click_login()
+
+    # Wait for URL to contain "dashboard" or another expected element/condition
+    wait = WebDriverWait(driver, 10)
+    wait.until(EC.url_contains("dashboard"))  # Or wait for a specific element
+
+    assert "dashboard" in driver.current_url
+
+    # Navigate to the Clients page through the dashboard
+    dashboard_clients_link = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href='/clients/list']")))  # Replace with the correct selector
+    dashboard_clients_link.click()
+
+    clients_page = ClientsPage(driver)
+    clients_page.click_create_client()
+    client_name = f"Test Client {random.randint(1000, 9999)}"
+    clients_page.enter_client_name(client_name)
+    clients_page.click_save()
+
+    # Add assertions to verify client creation
+    # Example: Wait for a success message or check if the new client appears in a list
+    wait = WebDriverWait(driver, 10)
+    wait.until(EC.text_to_be_present_in_element((By.ID, "success_message"), "Client created successfully!"))
+    driver.quit()
+
+def test_create_client_with_long_name():
+    driver = get_driver()
+    driver.get("https://app.sitestreamtech.com/")  # Correct login URL
+
+    login_page = LoginPage(driver)
+    login_page.enter_username("hunter@redskytech.io")  # Replace with your actual username
+    login_page.enter_password("fat")  # Replace with your actual password
+    login_page.click_login()
+
+    # Wait for URL to contain "dashboard" or another expected element/condition
+    wait = WebDriverWait(driver, 10)
+    wait.until(EC.url_contains("dashboard"))  # Or wait for a specific element
+
+    assert "dashboard" in driver.current_url
+
+    # Navigate to the Clients page through the dashboard
+    dashboard_clients_link = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href='/clients/list']")))  # Replace with the correct selector
+    dashboard_clients_link.click()
+
+    clients_page = ClientsPage(driver)
+    clients_page.click_create_client()
+
+    client_name = "Test Client " + "A" * 255  # Long client name
+
+    clients_page.enter_client_name(client_name)
+    clients_page.click_save()
+
+    # Add assertions to verify client creation
+    # Example: Wait for a success message or check if the new client appears in a list
+    wait = WebDriverWait(driver, 10)
+    wait.until(EC.text_to_be_present_in_element((By.ID, "success_message"), "Client created successfully!"))
+    driver.quit()
